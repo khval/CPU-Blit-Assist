@@ -25,7 +25,7 @@
 ; Includes (OS includes assume at least NDK 1.3) 
 	include exec/types.i
 	include	exec/exec.i
-	include libs/exec_lib.i
+;	include libs/exec_lib.i
 	include hardware/custom.i
 	include hardware/cia.i
 	include hardware/dmabits.i
