@@ -1,13 +1,13 @@
 # Preface
 
-This repository is aims as being test case for chipset.libary, but while I work on it I realized changes I made to make it compile on Amiga systems can useful for beginners, there for the project is spited into two.
+This repository is aims as being test case for chipset.libary, but while I work on it I realized changes I made to make it compile on Amiga systems can be useful for beginners, there for the project is spited into two.
 
 Repository “Lacey” for classic Amiga systems.
 
 Repository “Main” for chipset.libary (Systems without Amiga chipset AmigaONE,Amitalon,Dracro)
 
 Repository will be merged when its all done, compiler switches allow 
-you compile for chipset.library or use bang the hardware directly.
+you to compile for chipset.library or use bang the hardware directly.
 
 I should maybe end with small disclaimer this I only bowered the code, read copyright noticed at bottom. Sadly, they did use git.
 
