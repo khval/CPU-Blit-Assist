@@ -7,7 +7,7 @@ Repository “Lacey” for classic Amiga systems.
 Repository “Main” for chipset.libary (Systems without Amiga chipset AmigaONE,Amitalon,Dracro)
 
 Repository will be merged when its all done, compiler switches allow 
-you to compile for chipset.library or use bang the hardware directly.
+you to compile for chipset.library or bang the hardware directly (read/write direct).
 
 I should maybe end with small disclaimer this I only bowered the code, read copyright noticed at bottom. Sadly, they did use git.
 
