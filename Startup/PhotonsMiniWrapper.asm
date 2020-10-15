@@ -37,12 +37,12 @@ custombase			EQU	$dff000
 		btst	#0,297(a6)		;68000 CPU?
 		beq.s	.yes68k
 		lea		.GetVBR(PC),a5	;else fetch vector base address to a5
-		jsr		-30(a6)			;enter Supervisor mode
+		jsr		_LVOSupervisor(a6)			;enter Supervisor mode
 
 ;    *--- save view+coppers ---*
 
 .yes68k	lea 	.GfxLib(PC),a1	;either way return to here and open
-		jsr 	-408(a6)		;graphics library
+		jsr 	_LVOOldOpenLibrary(a6)		;graphics library
 		tst.l 	d0				;if not OK,
 		beq 	.quit			;exit program.
 		move.l 	d0,a5			;a5=gfxbase
@@ -50,7 +50,7 @@ custombase			EQU	$dff000
 		move.l	a5,a6
 		move.l	34(a6),-(sp)
 		sub.l	a1,a1			;blank screen to trigger screen switch
-		jsr		-222(a6)		;on Amigas with graphics cards
+		jsr		_LVOLoadView(a6)		;on Amigas with graphics cards
 
 ;    *--- save int+dma ---*
 
@@ -92,13 +92,13 @@ custombase			EQU	$dff000
 
 		move.l	a5,a6
 		move.l	(sp)+,a1
-		jsr		-222(a6)		;restore OS screen
+		jsr		_LVOLoadView(a6)		;restore OS screen
 
 ;    *--- close lib+exit ---*
 
 		move.l	a6,a1			;close graphics library
 		move.l	4.w,a6
-		jsr		-414(a6)
+		jsr		_LVOCloseLibrary(a6)
 .quit	moveq	#0,d0			;clear error return code to OS
 		rts						;back to AmigaDOS/Workbench.
 
