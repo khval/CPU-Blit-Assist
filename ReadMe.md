@@ -1,4 +1,4 @@
-CPU Blit Assist readme
+# CPU Blit Assist readme
 
 CPU Blit Assist is an example program that showcases an easy to implement
 method for blitting bobs using the CPU and Blitter in combination. This
