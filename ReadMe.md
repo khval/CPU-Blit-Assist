@@ -1,4 +1,20 @@
-CPU Blit Assist readme
+# Preface
+
+This repository is aims as being test case for chipset.libary, but while I work on it I realized changes I made to make it compile on Amiga systems can be useful for beginners, there for the project is spited into two.
+
+Repository “Lacey” for classic Amiga systems.
+
+Repository “Main” for chipset.libary (Systems without Amiga chipset AmigaONE,Amitalon,Dracro)
+
+Repository will be merged when its all done, compiler switches allow 
+you to compile for chipset.library or use bang the hardware directly.
+
+I should maybe end with small disclaimer this I only bowered the code, read copyright noticed at bottom. Sadly, they did use git.
+
+**Best Regards**
+Kjetil Hvalstrand
+
+# CPU Blit Assist readme
 
 CPU Blit Assist is an example program that showcases an easy to implement
 method for blitting bobs using the CPU and Blitter in combination. This
@@ -6,7 +22,7 @@ increases blitting performance on AGA machines. The code is primarily aimed
 at the low end AGA machines, the A1200 and CD32*.
 
 The example shows how concurrent Blitter+CPU blitting can improve blitting
-performance by around 13%**. Which is not an amazing number by itself, but it
+performance by around 13%. Which is not an amazing number by itself, but it
 is essentially "free": other than the code itself and a requirement for using
 only bob image data that is aligned to 32 bit boundaries and is multiples of
 32 bits wide, there are no extra costs in terms of memory. As a result, 
