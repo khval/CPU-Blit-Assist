@@ -1,3 +1,10 @@
+# Preface
+
+This project is splinted into two, 
+
+Repository “Lacey” for classic Amiga systems.
+Repository “Main” for chipset.libary (Systems without Amiga chipset AmigaONE,Amitalon,Dracro)
+
 # CPU Blit Assist readme
 
 CPU Blit Assist is an example program that showcases an easy to implement
