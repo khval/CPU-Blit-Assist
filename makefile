@@ -19,7 +19,7 @@ LNK=vlink
 
 # Setup includes & libraries
 INCLUDE= -I$(SYSTEMDIR) -I$(GFXDIR) -I$(SUPPORTDIR) -I$(DATADIR)
-LIBS=-L $(MAINDIR)/../LIB -l amiga
+LIBS=-L NDK31:INCLUDES/LINKER_LIBS -l amiga
 
 # Setup assembler flags
 ASMFLAGS_STD=$(INCLUDE) -Fhunk -m68020 
