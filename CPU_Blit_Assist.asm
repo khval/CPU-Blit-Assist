@@ -55,6 +55,7 @@ PERF_FRAME			EQU	0	; Set to one to enable full-frame timer
 custombase			EQU	$dff000
 ;ciabase				EQU	$bfe000
 ciaa				EQU	$bfe001
+ciab				EQU $bfd000
 potgor				EQU	$016
 ciaa_pra			EQU $bfe001
 bit_joyb1			EQU 7
@@ -803,11 +804,11 @@ ReadInput
 RND
 		move.l	d2,-(a7)			; Stack
 		move.l	seed,d0
-		move.w	$dff006,d2
+		move.w	custombase+$6,d2
 		swap	d2
-		move.b	$bfe801,d2
+		move.b	ciaa+ciatodlow,d2
 		lsl.w	#8,d2
-		move.b	$bfd800,d2
+		move.b	ciab+ciatodlow,d2
 		add.l	d2,d0
 		mulu.l	#$59fa769f,d2:d0
 		add.l	d2,d0
@@ -829,7 +830,7 @@ RND
 Randomize
 		movem.l	d0/d7/a2/a3,-(sp)	; Stack
 
-		lea.l	$dff000,a2			; custom chips
+		lea.l	custombase,a2			; custom chips
 		lea.l	$dc0000,a3			; internal clock
 		moveq	#15,d7				; (16 regs)
 		move.w	(a2),d0
