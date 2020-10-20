@@ -13,9 +13,10 @@
 ; TAB size = 4 spaces
 
 	include exec/types.i
-	include	exec/exec.i
+	include exec/exec.i
 	include exec/execbase.i
 	include hardware/custom.i
+	include "GRAPHICS/GFXBASE.I"
 	include	debug.i
 
 	XDEF	WaitEOF
@@ -23,8 +24,10 @@
 	
 ; Custom chips offsets
 custombase			EQU	$dff000
-
 		move.l	4.w,a6			;Exec library base address in a6
+
+		jsr openGraphics
+
 		bsr		FetchCPUType
 		tst.w	d6
 		beq		.err68k
@@ -41,12 +44,8 @@ custombase			EQU	$dff000
 
 ;    *--- save view+coppers ---*
 
-.yes68k	lea 	.GfxLib(PC),a1	;either way return to here and open
-		jsr 	_LVOOldOpenLibrary(a6)		;graphics library
-		tst.l 	d0				;if not OK,
-		beq 	.quit			;exit program.
-		move.l 	d0,a5			;a5=gfxbase
-
+.yes68k	
+		move.l 	graphicsbase,a5			;a5=gfxbase
 		move.l	a5,a6
 		move.l	34(a6),-(sp)
 		sub.l	a1,a1			;blank screen to trigger screen switch
@@ -77,8 +76,8 @@ custombase			EQU	$dff000
 
 ;   *--- restore all ---*
 
-		bsr.s	WaitEOF			;wait out the demo's last frame
-		bsr.s	AllOff			;turn off all interrupts+DMA
+		bsr 	WaitEOF			;wait out the demo's last frame
+		bsr	AllOff			;turn off all interrupts+DMA
 		move.l	(sp)+,$6c(a4)	;restore VB vector
 		move.l	38(a5),$80(a6)	;and copper pointers
 		move.l	50(a5),$84(a6)
@@ -96,26 +95,40 @@ custombase			EQU	$dff000
 
 ;    *--- close lib+exit ---*
 
-		move.l	a6,a1			;close graphics library
-		move.l	4.w,a6
-		jsr		_LVOCloseLibrary(a6)
-.quit	moveq	#0,d0			;clear error return code to OS
-		rts						;back to AmigaDOS/Workbench.
+		jmp	quit
 
 .GetVBR	dc.w	$4e7a,$c801		;hex for "movec VBR,a4"
 		rte						;return from Supervisor mode
-		
+
 		; Error: requires 68020+
 .err68k	lea.l	txt_68k(pc),a0
 		bsr		PrintError
-		bra		.quit
+		bra		quit
 		
 		; Error: requires AGA
 .erraga	lea.l	txt_aga(pc),a0
 		bsr		PrintError
-		bra		.quit
+		bra		quit
 
-.GfxLib	dc.b "graphics.library",0,0
+openGraphics
+		lea 	GfxLib(PC),a1
+		jsr 	_LVOOldOpenLibrary(a6)		;graphics library
+		move.l	d0,graphicsbase
+		tst.l 	d0	
+		beq 	quit	
+		rts
+quit	
+		move.l	graphicsbase,d0
+		tst.l		d0
+		move.l	d0,a1
+		beq		.graphicsbase_not_open
+		move.l	4.w,a6
+		jsr		_LVOCloseLibrary(a6)
+
+.graphicsbase_not_open
+
+		moveq	#0,d0			;clear error return code to OS
+		rts						;back to AmigaDOS/Workbench.
 
 WaitEOF:				;wait for end of frame
 		bsr.s WaitBlitter
@@ -166,14 +179,14 @@ FetchCPUType
 		; Detects whether the Amiga has OCS/ECS or AGA
 		; Returns:
 		; D6 = 0 is OCS/ECS, 1 = AGA+
+
 FetchChipsetType
 		movem.l	d0/a6,-(sp)			; Stack
 				
-		lea.l	custombase,a6		; Custom chip base
-		moveq	#0,d6				; Assume OCS/ECS
-		
-		; Test for AGA using bit nine of VPOSR register
-		move.w	vposr(a6),d0
+		move.l	graphicsbase,a6
+ 		clr.l		d0
+ 		move.b	gb_ChipRevBits0(a6),d0
+
 		btst	#9,d0
 		beq		.no_aga
 		
@@ -249,7 +262,12 @@ OSCloseDos
 .error	moveq	#1,d1
 		bra		.done
 		
+
+graphicsbase
+ 		dc.l	0
 dosbase	dc.l	0
+
+GfxLib	dc.b "graphics.library",0,0
 dosname dc.b	"dos.library",0,0
 		cnop 0,2
 txt_68k	dc.w	.txtend-.txtstrt
